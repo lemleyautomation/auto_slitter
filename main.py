@@ -15,6 +15,17 @@ import Limit_Switch as switch
 import Servo
 import Vision
 
+cameras = [ 'none',
+            'none',
+            '20439783',
+            '20439787',
+            '20439785',
+            '20262959',
+            '20439780',
+            '20439781',
+            '20439779',
+            '20439784' ]
+
 tags = Tags()
 tag_lock = Lock()
 
@@ -35,7 +46,7 @@ servo_input_registers, servo_output_registers = Servo.configure(servo, servo_inp
 tags.start_position = Servo.get_position(servo_input_registers)
 print('encoder position:', tags.start_position, 'inches')
 
-with Camera('20439780') as camera:
+with Camera(cameras[tags.knife]) as camera:
     camera.AcquisitionFrameRate = 30
     camera.start()
 
