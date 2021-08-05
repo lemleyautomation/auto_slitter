@@ -59,9 +59,7 @@ with Camera(cameras[tags.knife]) as camera:
         tags.current_image = clone(camera.get_array())
 
         if tags.knife < 5:
-            tags.current_image = cv2.flip(tags.current_image, 1)
-        else:
-            pass#tags.current_image = cv2.flip(tags.current_image, 0)
+            tags.current_image = cv2.flip(tags.current_image, -1)
 
         tags.current_image = cv2.resize(tags.current_image, (100,200), cv2.INTER_AREA)
         tags.previous_image_timestamp = tags.image_timestamp
