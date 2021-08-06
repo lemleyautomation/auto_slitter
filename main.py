@@ -15,7 +15,7 @@ import Limit_Switch as switch
 import Servo
 import Vision
 from flask import Flask, Response
-import tag_server
+import hmi_server
 
 #################################################################################
 '''
@@ -38,9 +38,10 @@ Thread(target=image_server).start()
 ip_address = get_IP_address()
 knife = int(ip_address[-1])
 print("knife #", knife)
+
 if knife == 1:
     print('starting tag server')
-    tag_server.serve()
+    hmi_server.serve()
     exit()
 
 cameras = [ 'none',
@@ -56,6 +57,8 @@ cameras = [ 'none',
 
 tags = Tags()
 tag_lock = Lock()
+
+tags.knife = knife
 
 if tags.knife > 4:
     tags.flip_camera = -1
