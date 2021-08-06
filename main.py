@@ -68,8 +68,8 @@ with Camera(cameras[tags.knife]) as camera:
     camera.AcquisitionFrameRate = 30
     camera.start()
 
-    #server_thread = Thread(target=tag_server, args=(tags,tag_lock))
-    #server_thread.start()
+    server_thread = Thread(target=tag_server, args=(tags,tag_lock))
+    server_thread.start()
 
     while True:
         start_t = now()
@@ -86,7 +86,7 @@ with Camera(cameras[tags.knife]) as camera:
         start = now()
         tags = Vision.getDeviation(tags)
         tags = Vision.getSpeed(tags)
-        tags.underspeed = False# (tags.speed < 0.05)
+        tags.underspeed = (tags.speed < 0.05)
         
         enabled, limit_switch = switch.get_status(limit_switch, tags.knife)
         if enabled != tags.enabled:
