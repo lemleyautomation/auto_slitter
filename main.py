@@ -90,6 +90,11 @@ with Camera(cameras[tags.knife]) as camera:
     camera.AcquisitionFrameRate = 30
     camera.start()
 
+    try:
+        tags.current_image = clone(camera.get_array())
+    except:
+        exit()
+
     server_thread = Thread(target=tag_server, args=(tags,tag_lock))
     server_thread.start()
 
