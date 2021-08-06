@@ -15,20 +15,8 @@ import Limit_Switch as switch
 import Servo
 import Vision
 from flask import Flask, Response
+import tag_server
 
-cameras = [ 'none',
-            'none',
-            '20439783',
-            '20439787',
-            '20439785',
-            '20262959',
-            '20439780',
-            '20439781',
-            '20439779',
-            '20439784' ]
-
-tags = Tags()
-tag_lock = Lock()
 #################################################################################
 '''
 app = Flask(__name__)
@@ -48,8 +36,25 @@ Thread(target=image_server).start()
 '''
 #################################################################################
 ip_address = get_IP_address()
-tags.knife = int(ip_address[-1])
-print("knife #", tags.knife)
+knife = int(ip_address[-1])
+print("knife #", knife)
+if knife == 1:
+    print('starting tag server')
+    tag_server.serve()
+
+cameras = [ 'none',
+            'none',
+            '20439783',
+            '20439787',
+            '20439785',
+            '20262959',
+            '20439780',
+            '20439781',
+            '20439779',
+            '20439784' ]
+
+tags = Tags()
+tag_lock = Lock()
 
 if tags.knife > 4:
     tags.flip_camera = -1
