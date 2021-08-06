@@ -64,7 +64,18 @@ servo_input_registers, servo_output_registers = Servo.configure(servo, servo_inp
 tags.start_position = Servo.get_position(servo_input_registers)
 print('encoder position:', tags.start_position, 'inches')
 
-tags.trim = 4
+default_trim = [ 4, #0
+                 4, #1
+                 4, #2
+                 4, #3
+                 -12, #4
+                 4, #5
+                 4, #6
+                 4, #7
+                 4, #8
+                 4] #9
+
+tags.trim = default_trim[tags.knife]
 
 with Camera(cameras[tags.knife]) as camera:
     camera.AcquisitionFrameRate = 30
@@ -136,7 +147,7 @@ with Camera(cameras[tags.knife]) as camera:
             servo_output_registers = Servo.start_move(servo_output_registers, False)
             tags.even = True
         else:
-            if tags.enabled and abs(tags.deviation) > 0.01 and not tags.underspeed and distance_from_start < 5:
+            if tags.enabled and abs(tags.deviation) > 0.01 and not tags.underspeed and distance_from_start < 2.5:
                 servo_output_registers = Servo.start_move(servo_output_registers, True)
             tags.even = False
 
