@@ -41,6 +41,7 @@ print("knife #", knife)
 if knife == 1:
     print('starting tag server')
     tag_server.serve()
+    exit()
 
 cameras = [ 'none',
             'none',
