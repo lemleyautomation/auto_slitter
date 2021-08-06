@@ -64,6 +64,8 @@ servo_input_registers, servo_output_registers = Servo.configure(servo, servo_inp
 tags.start_position = Servo.get_position(servo_input_registers)
 print('encoder position:', tags.start_position, 'inches')
 
+tags.trim = 4
+
 with Camera(cameras[tags.knife]) as camera:
     camera.AcquisitionFrameRate = 30
     camera.start()

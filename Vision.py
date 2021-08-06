@@ -117,13 +117,13 @@ def getDeviation(tags):
     
     bins = cv2.GaussianBlur(bins, (0,0), 10)
     
-    y = np.argmax(bins) - (tags.current_image.shape[0]/2)
+    y = np.argmax(bins) - (tags.current_image.shape[0]/2) + (((tags.trim/32)*tags.pixels_per_inch)/scale)
     if y > pos:
         pos = pos + 1
     elif y < pos:
         pos = pos - 1
     
-    tags.deviation = (pos*scale)/tags.pixels_per_inch + (tags.trim/32)
+    tags.deviation = (pos*scale)/tags.pixels_per_inch
 
     #print(round(y,3), round(pos, 3), round(tags.deviation,3))
 
