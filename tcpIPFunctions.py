@@ -10,6 +10,7 @@ import pickle
 from Tags import Tags, recieveTags
 from copy import deepcopy as clone
 import cv2
+from flask import Flask 
 
 def get_IP_address():
     # Unless we try to connect to something, the IP address we get will just be 'localhost'
@@ -52,7 +53,7 @@ def hmi(tags):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
         tag_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         tag_server.bind(('', 8080))
-        tag_server.listen(10)
+        tag_server.listen(1)
         connection, address = tag_server.accept()
         while not tags.stop_server:
             try:

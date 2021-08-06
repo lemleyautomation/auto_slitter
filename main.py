@@ -14,6 +14,7 @@ from Tags import Tags
 import Limit_Switch as switch
 import Servo
 import Vision
+from flask import Flask, Response
 
 cameras = [ 'none',
             'none',
@@ -28,7 +29,24 @@ cameras = [ 'none',
 
 tags = Tags()
 tag_lock = Lock()
+#################################################################################
+'''
+app = Flask(__name__)
 
+def gen_frame():
+    frame = cv2.imencode('.jpg', tags.current_image)[1].tobytes()
+    yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+
+@app.route('/jpg/image.jpg')
+def jpg():
+    return Response(gen_frame(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+def image_server():
+    app.run(host='192.168.1.26')
+
+Thread(target=image_server).start()
+'''
+#################################################################################
 ip_address = get_IP_address()
 tags.knife = int(ip_address[-1])
 print("knife #", tags.knife)
@@ -50,8 +68,8 @@ with Camera(cameras[tags.knife]) as camera:
     camera.AcquisitionFrameRate = 30
     camera.start()
 
-    server_thread = Thread(target=tag_server, args=(tags,tag_lock))
-    server_thread.start()
+    #server_thread = Thread(target=tag_server, args=(tags,tag_lock))
+    #server_thread.start()
 
     while True:
         start_t = now()
