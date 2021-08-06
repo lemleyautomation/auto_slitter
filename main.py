@@ -99,7 +99,7 @@ with Camera(cameras[tags.knife]) as camera:
         start = now()
         tags = Vision.getDeviation(tags)
         tags = Vision.getSpeed(tags)
-        tags.underspeed = (tags.speed < 0.05)
+        tags.underspeed = (tags.speed < 0.10)
         
         enabled, limit_switch = switch.get_status(limit_switch, tags.knife)
         if enabled != tags.enabled:
