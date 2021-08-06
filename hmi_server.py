@@ -53,7 +53,7 @@ def serve():
         hmi_registers = hmi.read_registers(0,38)
 
         pi_tags[2] = get_tags('192.168.1.22')
-        #pi_tags[3] = get_tags('192.168.1.23')
+        pi_tags[3] = get_tags('192.168.1.23')
         pi_tags[4] = get_tags('192.168.1.24')
         pi_tags[5] = get_tags('192.168.1.25')
         pi_tags[6] = get_tags('192.168.1.26')
