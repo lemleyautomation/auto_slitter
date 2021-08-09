@@ -11,8 +11,9 @@ class Tags:
     underspeed = True
     program = 0
     trim = 0
-    program_comand = 2
-    trim_command = 0
+    increase_trim = False
+    decrease_trim = False
+    trim_command_debounce = False
     Knife_alignment = 128
 
     flip_camera = 1

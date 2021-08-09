@@ -43,11 +43,14 @@ def get_tags(ip_address):
 
 def tag_error_check(module):
     tags = Tags()
-    tags.knife = module
+
     try:
         tags = get_tags('192.168.1.2' + str(module))
     except:
         pass
+
+    if tags.knife == 0:
+        tags.knife = module
     return tags
 
 def serve():
@@ -85,7 +88,7 @@ def serve():
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 1, tags.servo_ready)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 2, tags.underspeed)
             
-        pw((hmi_registers[37], hmi_registers[38]))
+        #pw((hmi_registers[37], hmi_registers[38]))
         hmi.write_registers(0, hmi_registers[0:36])
         sleep(0.032)    
 
