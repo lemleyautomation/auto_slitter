@@ -27,38 +27,22 @@ def get_IP_address():
     return ip_address
 
 def tag_server(tags,tag_lock):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
-        tag_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        tag_server.settimeout(5)
-        tag_server.bind(('', 8090))
-        tag_server.listen(10)
-        while not tags.stop_server:
-            try:
-                connection, address = tag_server.accept()
-                with connection:
-                    connection.sendall(pickle.dumps(tags))
-            except socket.timeout:
-                pass
+    while not tags.stop_server:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
+                tag_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                tag_server.settimeout(5)
+                tag_server.bind(('', 8090))
+                tag_server.listen(10)
+                while not tags.stop_server:
+                    try:
+                        connection, address = tag_server.accept()
+                        with connection:
+                            connection.sendall(pickle.dumps(tags))
+                    except socket.timeout:
+                        pass
+        except:
+            print('tag server rebooting')
             
     print('tag server shutdown')
     return
-
-def hmi(tags):
-    sleep(10)
-    img_encoded = cv2.imencode('.jpg', tags.current_image)[1].tobytes()
-
-    #files = {'imageData': img_bytes}
-    #response = requests.post(url,files=files)
-
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
-        tag_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        tag_server.bind(('', 8080))
-        tag_server.listen(1)
-        connection, address = tag_server.accept()
-        while not tags.stop_server:
-            try:
-                message = connection.recv(1024)
-                connection.sendall(img_encoded)
-                #print(message)
-            except socket.timeout:
-                pass

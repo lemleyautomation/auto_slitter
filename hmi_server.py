@@ -44,13 +44,13 @@ def get_tags(ip_address):
 def serve():
     hmi = mod.ModbusTcp(ip="192.168.1.45", port=502)
     hmi.connect()
-    hmi_registers = hmi.read_registers(0,38)
+    hmi_registers = hmi.read_registers(0,39)
 
     all_trim = 0
 
     pi_tags = {}
     while True:
-        hmi_registers = hmi.read_registers(0,38)
+        hmi_registers = hmi.read_registers(0,39)
 
         pi_tags[2] = get_tags('192.168.1.22')
         pi_tags[3] = get_tags('192.168.1.23')
@@ -76,7 +76,8 @@ def serve():
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 1, tags.servo_ready)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 2, tags.underspeed)
             
-        hmi.write_registers(0, hmi_registers)
+        pw((hmi_registers[-2], hmi_registers[-1]))
+        hmi.write_registers(0, hmi_registers[:-2])
         sleep(0.032)    
 
     hmi.close()
