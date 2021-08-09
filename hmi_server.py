@@ -41,6 +41,15 @@ def get_tags(ip_address):
             pass
     return tags
 
+def tag_error_check(module):
+    tags = Tags()
+    tags.knife = module
+    try:
+        tags = get_tags('192.168.1.2' + str(module))
+    except:
+        pass
+    return tags
+
 def serve():
     hmi = mod.ModbusTcp(ip="192.168.1.45", port=502)
     hmi.connect()
@@ -52,14 +61,14 @@ def serve():
     while True:
         hmi_registers = hmi.read_registers(0,39)
 
-        pi_tags[2] = get_tags('192.168.1.22')
-        pi_tags[3] = get_tags('192.168.1.23')
-        pi_tags[4] = get_tags('192.168.1.24')
-        pi_tags[5] = get_tags('192.168.1.25')
-        pi_tags[6] = get_tags('192.168.1.26')
-        pi_tags[7] = get_tags('192.168.1.27')
-        pi_tags[8] = get_tags('192.168.1.28')
-        pi_tags[9] = get_tags('192.168.1.29')
+        pi_tags[2] = tag_error_check(2)
+        pi_tags[3] = tag_error_check(3)
+        pi_tags[4] = tag_error_check(4)
+        pi_tags[5] = tag_error_check(5)
+        pi_tags[6] = tag_error_check(6)
+        pi_tags[7] = tag_error_check(7)
+        pi_tags[8] = tag_error_check(8)
+        pi_tags[9] = tag_error_check(9)
         '''
         deviations = ''
         for tag_set in pi_tags.items():
@@ -76,8 +85,8 @@ def serve():
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 1, tags.servo_ready)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 2, tags.underspeed)
             
-        pw((hmi_registers[-2], hmi_registers[-1]))
-        hmi.write_registers(0, hmi_registers[:-2])
+        pw((hmi_registers[37], hmi_registers[38]))
+        hmi.write_registers(0, hmi_registers[0:36])
         sleep(0.032)    
 
     hmi.close()
