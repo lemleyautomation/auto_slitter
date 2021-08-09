@@ -18,8 +18,6 @@ class Tags:
     trim_command_debounce = False
     Knife_alignment = 128
 
-    flip_camera = 1
-
     stop_server = False
 
     heartbeat_timeout = 0

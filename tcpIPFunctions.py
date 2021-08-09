@@ -10,7 +10,21 @@ import pickle
 from Tags import Tags, recieveTags
 from copy import deepcopy as clone
 import cv2
-from flask import Flask 
+from flask import Flask
+import json
+
+def get_settings():
+    file = open('settings.txt')
+    settings = json.load(file)
+    file.close()
+    return settings['trim'], settings['camera'], settings['module']
+
+def get_trim():
+    file = open('settings.txt')
+    settings = json.load(file)
+    file.close()
+    return settings['trim']
+
 
 def get_IP_address():
     # Unless we try to connect to something, the IP address we get will just be 'localhost'
@@ -26,7 +40,7 @@ def get_IP_address():
     dummy_socket.close()
     return ip_address
 
-def tag_server(tags,tag_lock):
+def tag_server(tags):
     while not tags.stop_server:
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:

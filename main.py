@@ -1,67 +1,30 @@
-from tcpIPFunctions import *
-import pickle
-import pylibmodbus as mod
 from threading import Thread, Lock
-import socket
-import sys
 from copy import deepcopy as clone
+from simple_pyspin import Camera
 from time import time as now
 from time import sleep
-import cv2
-import numpy as np
-from simple_pyspin import Camera
-from Tags import Tags
+
 import Limit_Switch as switch
-import Servo
-import Vision
-from flask import Flask, Response
+from tcpIPFunctions import *
+from Tags import Tags
 import hmi_server
+import Vision
+import Servo
 
-#################################################################################
-'''
-app = Flask(__name__)
+this_trim, this_camera, this_knife = get_settings()
+print('knife number:', this_knife)
+print('trim value:', this_trim)
+print('camera serial number:', this_camera)
 
-def gen_frame():
-    frame = cv2.imencode('.jpg', tags.current_image)[1].tobytes()
-    yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-@app.route('/jpg/image.jpg')
-def jpg():
-    return Response(gen_frame(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-def image_server():
-    app.run(host='192.168.1.26')
-
-Thread(target=image_server).start()
-'''
-#################################################################################
-ip_address = get_IP_address()
-knife = int(ip_address[-1])
-print("knife #", knife)
-
-if knife == 1:
+if this_knife == 1:
     print('starting tag server')
     hmi_server.serve()
     exit()
 
-cameras = [ 'none',
-            'none',
-            '20439783',
-            '20439787',
-            '20439785',
-            '20262959',
-            '20439780',
-            '20439781',
-            '20439779',
-            '20439784' ]
-
 tags = Tags()
-tag_lock = Lock()
 
-tags.knife = knife
-
-if tags.knife > 4:
-    tags.flip_camera = -1
+tags.knife = this_knife
+tags.trim = this_trim
 
 limit_switch = switch.connect()
 tags.enabled, limit_switch = switch.get_status(limit_switch, tags.knife)
@@ -73,36 +36,31 @@ servo_input_registers, servo_output_registers = Servo.configure(servo, servo_inp
 tags.start_position = Servo.get_position(servo_input_registers)
 print('encoder position:', tags.start_position, 'inches')
 
-default_trim = [ 4, #0
-                 4, #1
-                 4, #2
-                 4, #3
-                 -12, #4
-                 4, #5
-                 4, #6
-                 4, #7
-                 4, #8
-                 4] #9
-
-tags.trim = default_trim[tags.knife]
-
-with Camera(cameras[tags.knife]) as camera:
+with Camera(this_camera) as camera:
     camera.AcquisitionFrameRate = 30
     camera.start()
 
     try:
         tags.current_image = clone(camera.get_array())
     except:
-        exit()
+        exit() # if image corrupted, exit program. Operating System will restart
 
-    server_thread = Thread(target=tag_server, args=(tags,tag_lock))
+    #start sending out tags on a separate thread
+    server_thread = Thread(target=tag_server, args=(tags,))
     server_thread.start()
 
+    #start of main program loop
     while True:
+        #now() means the current time in microseconds
         start_t = now()
+
+        #the previous image is used by getSpeed() to measure the roller speed
         tags.previous_image = clone(tags.current_image)
         tags.current_image = clone(camera.get_array())
 
+        #cameras 1-4 are mounted on the left side,
+        #cameras 5-9 are mounted on the right
+        #we flip the image so the program doesn't have to care about that
         if tags.knife < 5:
             tags.current_image = cv2.flip(tags.current_image, -1)
 
@@ -113,10 +71,16 @@ with Camera(cameras[tags.knife]) as camera:
         start = now()
         tags = Vision.getDeviation(tags)
         tags = Vision.getSpeed(tags)
-        tags.underspeed = (tags.speed < 0.10)
+        tags.underspeed = (tags.speed < 0.10) # units: % of maximum rollup speed
         
+        # lines 77-84 act like a ONE SHOT RISING instruction in a PLC
+        # a rising edge of the limit switch: resets servo alarms,
+        # sets the relative starting position of the knife,
+        # saves an image of the current pattern (for legacy programs)
+        # and checks for changes to the trim settings
         enabled, limit_switch = switch.get_status(limit_switch, tags.knife)
         if enabled != tags.enabled:
+            tags.trim = get_trim()
             tags.start_position = Servo.get_position(servo_input_registers)
             tags.template_image = clone(tags.current_image)
             servo_output_registers = Servo.reset_servo_alarms(servo_output_registers, 1)
