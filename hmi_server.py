@@ -87,7 +87,27 @@ def serve():
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 0, ((now()-tags.heartbeat_timeout) < 3))
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 1, tags.servo_ready)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 2, tags.underspeed)
-            
+
+            tags.increase_trim_all = get_bit(hmi_registers[37], 3)
+            tags.decrease_trim_all = get_bit(hmi_registers[37], 4)
+
+        pi_tags[2].increase_trim = get_bit(hmi_registers[37], 5)
+        pi_tags[2].decrease_trim = get_bit(hmi_registers[37], 6)
+        pi_tags[3].increase_trim = get_bit(hmi_registers[37], 7)
+        pi_tags[3].decrease_trim = get_bit(hmi_registers[37], 8)
+        pi_tags[4].increase_trim = get_bit(hmi_registers[37], 9)
+        pi_tags[4].decrease_trim = get_bit(hmi_registers[37], 10)
+        pi_tags[5].increase_trim = get_bit(hmi_registers[37], 11)
+        pi_tags[5].decrease_trim = get_bit(hmi_registers[37], 12)
+        pi_tags[6].increase_trim = get_bit(hmi_registers[37], 13)
+        pi_tags[6].decrease_trim = get_bit(hmi_registers[37], 14)
+        pi_tags[7].increase_trim = get_bit(hmi_registers[37], 15)
+        pi_tags[7].decrease_trim = get_bit(hmi_registers[38], 0)
+        pi_tags[8].increase_trim = get_bit(hmi_registers[38], 1)
+        pi_tags[8].decrease_trim = get_bit(hmi_registers[38], 2)
+        pi_tags[9].increase_trim = get_bit(hmi_registers[38], 3)
+        pi_tags[9].decrease_trim = get_bit(hmi_registers[38], 4)
+
         #pw((hmi_registers[37], hmi_registers[38]))
         hmi.write_registers(0, hmi_registers[0:36])
         sleep(0.032)    

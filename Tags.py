@@ -13,6 +13,8 @@ class Tags:
     trim = 0
     increase_trim = False
     decrease_trim = False
+    increase_trim_all = False
+    decrease_trim_all = False
     trim_command_debounce = False
     Knife_alignment = 128
 
