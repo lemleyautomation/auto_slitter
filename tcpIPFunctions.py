@@ -12,15 +12,18 @@ from copy import deepcopy as clone
 import cv2
 from flask import Flask
 import json
+import os
 
 def get_settings():
-    file = open('settings.txt')
+    file_path = os.path.dirname(os.getcwd()) + '/settings/settings.txt'
+    file = open(file_path)
     settings = json.load(file)
     file.close()
     return settings['trim'], settings['camera'], settings['module']
 
 def get_trim():
-    file = open('settings.txt')
+    file_path = os.path.dirname(os.getcwd()) + '/settings/settings.txt'
+    file = open(file_path)
     settings = json.load(file)
     file.close()
     return settings['trim']
