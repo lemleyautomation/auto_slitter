@@ -31,7 +31,7 @@ class Tags:
     heat_map = None
     previous_image = None
     template_image = None
-    pixels_per_inch = 320/4
+    pixels_per_inch = 312/4
     image_timestamp = 0
     previous_image_timestamp = 0
 
