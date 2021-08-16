@@ -25,6 +25,13 @@ class Tags:
         self.dev_head = (self.dev_head+1)%len(self.dev_samples)
         return np.average(self.dev_samples)
 
+    spd_samples = np.zeros(4)
+    spd_head = 0
+    def getAverages(self, spd):
+        self.spd_samples[self.spd_head] = spd
+        self.spd_head = (self.spd_head+1)%len(self.spd_samples)
+        return np.average(self.spd_samples)
+
     stop_server = False
 
     heartbeat_timeout = 0

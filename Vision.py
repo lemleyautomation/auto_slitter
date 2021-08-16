@@ -63,20 +63,20 @@ def get_graph(derivative_image, bluring=4):
 def getSpeed(tags):
     try:
         pos = tags.speed * 180
-        window = tags.previous_image[:,0:10]
-        result = cv2.matchTemplate(tags.current_image, window, cv2.TM_CCOEFF_NORMED)
-        spd = np.argmax(result)
+        window =  cv2.resize(tags.previous_image, (100,100), cv2.INTER_AREA)
+        template =  cv2.resize(tags.current_image, (100,100), cv2.INTER_AREA)
+
+        result = cv2.matchTemplate(template[5:-5,:], window[10:-10, 5:30], cv2.TM_CCOEFF_NORMED)
+        a,b,c,position = cv2.minMaxLoc(result)
+        spd = position[0] - 5
         scale = 320/tags.current_image.shape[1]
         seconds_per_frame = tags.image_timestamp-tags.previous_image_timestamp
         inches_travelled = (spd*scale)/tags.pixels_per_inch
         inches_per_second = inches_travelled / seconds_per_frame
         feet_per_minute = inches_per_second * 5
 
-        if feet_per_minute > pos + 10:
-            pos = pos + 10
-        elif feet_per_minute < pos - 10:
-            pos = pos - 10
-        
+        #print(position)
+
         tags.speed = feet_per_minute / 180
     except:
         pass

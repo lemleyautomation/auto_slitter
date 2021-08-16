@@ -37,7 +37,7 @@ tags.start_position = Servo.get_position(servo_input_registers)
 print('encoder position:', tags.start_position, 'inches')
 
 with Camera(this_camera) as camera:
-    camera.AcquisitionFrameRate = 16
+    camera.AcquisitionFrameRate = 20
     camera.start()
 
     try:
@@ -74,7 +74,9 @@ with Camera(this_camera) as camera:
         tags.underspeed = (tags.speed < 0.10) # units: % of maximum rollup speed
 
         average_deviation = tags.getAverage(tags.deviation)
-        #print(average_deviation)
+        average_speed = tags.getAverages(tags.speed)
+
+        tags.speed = average_speed
         
         # lines 77-84 act like a ONE SHOT RISING instruction in a PLC
         # a rising edge of the limit switch: resets servo alarms,
