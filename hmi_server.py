@@ -17,6 +17,7 @@ import Servo
 import Vision
 from flask import Flask, Response
 
+
 def recieve_message(socket):
     end_of_message = False
     fragments = bytearray()
@@ -53,16 +54,37 @@ def tag_error_check(module):
         tags.knife = module
     return tags
 
+def increaseTrim(pi, trim):
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
+            tag_server.connect(('192.168.1.2'+str(pi), 8089))
+            settings = {}
+            settings['trim'] = trim + 1
+            tag_server.sendall(pickle.dumps(settings))
+    except:
+        pass
+
+def decreaseTrim(pi, trim):
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
+            tag_server.connect(('192.168.1.2'+str(pi), 8089))
+            settings = {}
+            settings['trim'] = trim - 1
+            tag_server.sendall(pickle.dumps(settings))
+    except:
+        pass
+
 def serve():
     hmi = mod.ModbusTcp(ip="192.168.1.45", port=502)
     hmi.connect()
     hmi_registers = hmi.read_registers(0,39)
 
-    all_trim = 0
+    increase_trim = 0
+    decrease_trim = 0
 
     pi_tags = {}
     while True:
-        hmi_registers = hmi.read_registers(0,39)
+        hmi_registers = hmi.read_registers(0,40)
 
         pi_tags[2] = tag_error_check(2)
         pi_tags[3] = tag_error_check(3)
@@ -72,6 +94,14 @@ def serve():
         pi_tags[7] = tag_error_check(7)
         pi_tags[8] = tag_error_check(8)
         pi_tags[9] = tag_error_check(9)
+
+        if increase_trim == 0 and hmi_registers[38] != 0 and hmi_registers[38] < 10:
+            increaseTrim(hmi_registers[38], pi_tags[hmi_registers[38]].trim)
+        if decrease_trim == 0 and hmi_registers[39] != 0 and hmi_registers[39] < 10:
+            decreaseTrim(hmi_registers[39], pi_tags[hmi_registers[39]].trim)
+        increase_trim = hmi_registers[38]
+        decrease_trim = hmi_registers[39]
+
         '''
         deviations = ''
         for tag_set in pi_tags.items():
@@ -88,28 +118,8 @@ def serve():
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 1, tags.servo_ready)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 2, tags.underspeed)
 
-            tags.increase_trim_all = get_bit(hmi_registers[37], 3)
-            tags.decrease_trim_all = get_bit(hmi_registers[37], 4)
-
-        pi_tags[2].increase_trim = get_bit(hmi_registers[37], 5)
-        pi_tags[2].decrease_trim = get_bit(hmi_registers[37], 6)
-        pi_tags[3].increase_trim = get_bit(hmi_registers[37], 7)
-        pi_tags[3].decrease_trim = get_bit(hmi_registers[37], 8)
-        pi_tags[4].increase_trim = get_bit(hmi_registers[37], 9)
-        pi_tags[4].decrease_trim = get_bit(hmi_registers[37], 10)
-        pi_tags[5].increase_trim = get_bit(hmi_registers[37], 11)
-        pi_tags[5].decrease_trim = get_bit(hmi_registers[37], 12)
-        pi_tags[6].increase_trim = get_bit(hmi_registers[37], 13)
-        pi_tags[6].decrease_trim = get_bit(hmi_registers[37], 14)
-        pi_tags[7].increase_trim = get_bit(hmi_registers[37], 15)
-        pi_tags[7].decrease_trim = get_bit(hmi_registers[38], 0)
-        pi_tags[8].increase_trim = get_bit(hmi_registers[38], 1)
-        pi_tags[8].decrease_trim = get_bit(hmi_registers[38], 2)
-        pi_tags[9].increase_trim = get_bit(hmi_registers[38], 3)
-        pi_tags[9].decrease_trim = get_bit(hmi_registers[38], 4)
-
         #pw((hmi_registers[37], hmi_registers[38]))
         hmi.write_registers(0, hmi_registers[0:36])
-        sleep(0.032)    
+        sleep(0.062)    
 
     hmi.close()
