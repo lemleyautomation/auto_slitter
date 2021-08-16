@@ -119,9 +119,9 @@ def getDeviation(tags):
     
     y = np.argmax(bins) - (tags.current_image.shape[0]/2) + (((tags.trim/32)*tags.pixels_per_inch)/scale)
     if y > pos + 1:
-        pos = pos + 2
+        pos = pos + 1
     elif y < pos - 1:
-        pos = pos - 2
+        pos = pos - 1
     
     tags.deviation = (pos*scale)/tags.pixels_per_inch
 

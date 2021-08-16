@@ -18,6 +18,13 @@ class Tags:
     trim_command_debounce = False
     Knife_alignment = 128
 
+    dev_samples = np.zeros(4)
+    dev_head = 0
+    def getAverage(self, dev):
+        self.dev_samples[self.dev_head] = dev
+        self.dev_head = (self.dev_head+1)%len(self.dev_samples)
+        return np.average(self.dev_samples)
+
     stop_server = False
 
     heartbeat_timeout = 0

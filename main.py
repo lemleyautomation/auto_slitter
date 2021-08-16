@@ -72,6 +72,9 @@ with Camera(this_camera) as camera:
         tags = Vision.getDeviation(tags)
         tags = Vision.getSpeed(tags)
         tags.underspeed = (tags.speed < 0.10) # units: % of maximum rollup speed
+
+        average_deviation = tags.getAverage(tags.deviation)
+        #print(average_deviation)
         
         # lines 77-84 act like a ONE SHOT RISING instruction in a PLC
         # a rising edge of the limit switch: resets servo alarms,
@@ -89,8 +92,8 @@ with Camera(this_camera) as camera:
         tags.enabled = enabled
         
         servo_input_registers, servo_output_registers = Servo.read(servo, both=True)
-        c = write_float(servo_output_registers[37], servo_output_registers[36], 2)
-        print(round(c, 3))
+        #c = write_float(servo_output_registers[37], servo_output_registers[36], 2)
+        #print(round(c, 3))
 
         tags.servo_ready = Servo.is_ready(servo_input_registers)
         servo_output_registers = Servo.enable(servo_output_registers, tags.enabled)
@@ -114,15 +117,15 @@ with Camera(this_camera) as camera:
             tags.deviation = tags.deviation * 1.05
         '''
         current_position = Servo.get_position(servo_input_registers)
-        desired_position = current_position - tags.deviation
+        desired_position = current_position - average_deviation # tags.deviation
         distance_from_start = abs(desired_position-tags.start_position)
         servo_output_registers = Servo.set_position(servo_output_registers, desired_position)
-
+        '''
         if tags.speed < 0.2:
             servo_output_registers =  Servo.set_speed(servo_output_registers, 1.5, 3, 3)
         else:
             servo_output_registers =  Servo.set_speed(servo_output_registers, 2, 4, 4)
-
+        '''
         if not tags.even:
             servo_output_registers = Servo.start_move(servo_output_registers, False)
             tags.even = True
