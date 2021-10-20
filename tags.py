@@ -20,7 +20,7 @@ class Tags:
 
     offset = 0
     camera_serial = '20439780'
-    pixels_per_inch = 80
+    pixels_per_inch = 73
 
     cam_serials = [ '00000000', #0
                     '00000000', #1
