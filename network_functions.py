@@ -55,6 +55,16 @@ def update_server(message):
         print("comms error")
         return None
 
+def update_hmi(tags, IPaddress):
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as local:
+            local.settimeout(0.01)
+            local.connect((IPaddress, 8090))
+            send_message( ('hmi', tags), local)
+            return [recv_msg(local), True]
+    except:
+        return [tags, False]
+
 def vision_update(tags):
     response = update_server(('vision', tags))
     if response == None:
