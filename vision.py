@@ -20,7 +20,7 @@ images = Images()
 tags = Tags()
 
 tags.id = lan.get_ID() # 1-9 starting from wall side and counting up to forklift side
-tags.camera_serial = '20439780'
+tags.camera_serial = tags.cam_serials[tags.id]
 
 switch_on = False
 
@@ -67,7 +67,7 @@ with Camera(tags.camera_serial) as camera:
         else:
             programs[tags.program](images, tags)
         
-        print(round(tags.speed,2), '\t', tags.deviation)
+        #print(round(tags.speed,2), '\t', tags.deviation)
         #print(tags.votes, tags.program, round(now() - start,3))
         #print( round(now() - start_t,3), '\t\t', round(now() - start,3))
         tags.vision_server(lan.vision_update(tags))
