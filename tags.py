@@ -12,6 +12,28 @@ class Tags:
     position = 0.0
     start_position = 0.0
 
+    servo_offsets = [ 0,
+                      0,
+                      0.05,
+                      0,
+                      0,
+                      0,
+                      0.00,
+                      0,
+                      0,
+                      0 ]
+
+    servo_gains = [ 1,
+                    1,
+                    0.6,
+                    1,
+                    1,
+                    1,
+                    0.8,
+                    1,
+                    1,
+                    1 ]
+
     speed = 0.0
     speed_samples = numpy.zeros(5)
     ss_index = 0

@@ -25,7 +25,7 @@ while True:
 
     tags.switch_enabled, limit_switch = switch.get_status(limit_switch, id)
 
-    dev = (tags.deviation*0.6) + 0.05
+    dev = (tags.deviation*tags.servo_gains[tags.id]) + tags.servo_offsets[tags.id]
     #print(dev)
 
     if tags.switch_enabled:
@@ -52,7 +52,7 @@ while True:
 
         too_far = ( abs(relative_position) > 3 and ((relative_position>0) == (tags.deviation>0)) ) # 3 inches awawy from where we started
 
-        if not too_far and Servo.enabled(servo_input_registers) and not Servo.start_move_active(servo_output_registers) and not Servo.busy(servo_input_registers):
+        if not too_far and Servo.enabled(servo_input_registers) and not Servo.start_move_active(servo_output_registers) and not Servo.busy(servo_input_registers) and not tags.underspeed:
             servo_output_registers = Servo.start_move(servo_output_registers, True)
         else:
             servo_output_registers = Servo.start_move(servo_output_registers, False)
