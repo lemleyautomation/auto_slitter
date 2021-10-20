@@ -25,7 +25,8 @@ while True:
 
     tags.switch_enabled, limit_switch = switch.get_status(limit_switch, id)
 
-    print(tags.deviation)
+    dev = (tags.deviation*0.6) + 0.05
+    #print(dev)
 
     if tags.switch_enabled:
         if not limit_switch_db:
@@ -38,7 +39,7 @@ while True:
 
         tags.position = Servo.get_position(servo_input_registers)
 
-        servo_output_registers = Servo.set_position(servo_output_registers, tags.position - (tags.deviation*0.8))
+        servo_output_registers = Servo.set_position(servo_output_registers, tags.position - dev)
 
         #print( bit.bp(servo_input_registers[44]), bit.bp(servo_input_registers[47]), bit.bp(servo_output_registers[0]), bit.bp(servo_output_registers[2]), round(tags.deviation,2))
 
