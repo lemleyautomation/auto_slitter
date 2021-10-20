@@ -36,9 +36,9 @@ def configure(servo, servo_input_registers, servo_output_registers):
     servo.write_registers(0,servo_output_registers)
     sleep(0.05)
     servo_output_registers[0] = bit.clear_bit(servo_output_registers[0], 2)     # stop homing
-    servo_output_registers[20] = 4000                                # set acceleration to 4 in/s^2
+    servo_output_registers[20] = 200                                # set acceleration to 4 in/s^2
     servo_output_registers[21] = 0
-    servo_output_registers[24] = 4000                                # set deceleration to 4 in/s^2
+    servo_output_registers[24] = 200                                # set deceleration to 4 in/s^2
     servo_output_registers[25] = 0
     servo_output_registers[28] = 100                                # set servo speed to 2 in/s
     servo_output_registers[29] = 0

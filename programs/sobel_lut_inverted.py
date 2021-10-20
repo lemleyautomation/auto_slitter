@@ -71,8 +71,7 @@ def get_graph(derivative_image, bluring=4):
 
 
 def getDeviation(images, tags):
-    scale = 256/images.current.shape[0]
-    pos = (tags.deviation*tags.pixels_per_inch)/scale
+    pos = tags.deviation*tags.pixels_per_inch
 
     graph = None
 
@@ -88,13 +87,13 @@ def getDeviation(images, tags):
     
     bins = opencv.GaussianBlur(bins, (0,0), 10)
     
-    y = numpy.argmax(bins) - (images.current.shape[0]/2) + (((tags.offset/32)*tags.pixels_per_inch)/scale)
-    if y > pos:
-        pos = pos + 1
-    elif y < pos:
-        pos = pos - 1
+    y = numpy.argmax(bins) - (images.current.shape[0]/2) + (((tags.offset/32)*tags.pixels_per_inch))
+    if y > pos+1:
+        pos += 1
+    elif y < pos-1:
+        pos -= 1
     
-    tags.deviation = (pos*scale)/tags.pixels_per_inch
+    tags.deviation = pos/tags.pixels_per_inch
 
     #print(round(y,3), round(pos, 3), round(tags.deviation,3))
     #print('\t\t', tags.deviation, indicator)
