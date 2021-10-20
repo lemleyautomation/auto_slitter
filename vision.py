@@ -45,7 +45,9 @@ with Camera(tags.camera_serial) as camera:
         images.current = clone(camera.get_array())
         images.current_timestamp = now()
         if tags.switch_enabled and not switch_on:
+            print('switch turned on')
             images.template = clone(images.current)
+            opencv.imwrite('template.Bmp', images.template)
             switch_on = True
         else:
             switch_on = False

@@ -84,6 +84,7 @@ class Tags:
         self.offset = tags.offset
         self.pixels_per_inch = tags.pixels_per_inch
         self.camera_serial = tags.camera_serial
+        self.switch_enabled = tags.switch_enabled
 
 class Images:
     width = 320

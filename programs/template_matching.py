@@ -22,6 +22,7 @@ def getSpeed(images, tags):
 
 def getDeviation(images, tags):
     pos = (tags.deviation*tags.pixels_per_inch)
+    images.template = opencv.resize(images.template, (images.current.shape[0], images.current.shape[1]), opencv.INTER_AREA)
     #                                       (x, y)
     window = opencv.cvtColor(images.template, opencv.COLOR_BGR2GRAY)# opencv.resize(images.previous, (200,200), opencv.INTER_AREA)
     template = opencv.cvtColor(images.current, opencv.COLOR_BGR2GRAY)#  opencv.resize(images.current, (200,200), opencv.INTER_AREA)
