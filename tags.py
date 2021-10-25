@@ -23,16 +23,16 @@ class Tags:
                       0,
                       0 ]
 
-    servo_gains = [ 1,
-                    1,
-                    0.6,
-                    1,
-                    1,
-                    1,
-                    0.8,
+    servo_gains = [ 0.4,
                     0.4,
-                    1,
-                    1 ]
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4 ]
 
     speed = 0.0
     speed_samples = numpy.zeros(5)
