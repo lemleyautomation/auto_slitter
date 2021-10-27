@@ -61,7 +61,8 @@ def update_hmi(tags, IPaddress):
             local.settimeout(0.01)
             local.connect((IPaddress, 8090))
             send_message( ('hmi', tags), local)
-            return [recv_msg(local), True]
+            recieved_tags = recv_msg(local)
+            return [recieved_tags, True]
     except:
         return [tags, False]
 

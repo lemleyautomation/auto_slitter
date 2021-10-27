@@ -93,6 +93,7 @@ class Tags:
         self.speed = tags.speed
         self.deviation = tags.deviation
         self.underspeed = tags.underspeed
+        self.servo_offsets = tags.servo_offsets
 
     def vision_client(self, tags):
         self.speed = tags.speed
