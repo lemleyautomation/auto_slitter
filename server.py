@@ -7,6 +7,7 @@ from Limit_Switch import connect
 import socket
 import pickle
 from time import time as now
+from os import system as command_line
 
 from tags import Tags, Images
 import network_functions as lan
@@ -35,5 +36,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
             elif message[0] == 'monitor':
                 lan.send_message((tags,images), connection)
                 continue
+            elif message[0] == 'restart':
+                command_line('sudo reboot now')
             
             lan.send_message(tags, connection)
