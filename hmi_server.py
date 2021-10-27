@@ -62,7 +62,7 @@ while True:
     pi_tags[7] = lan.update_hmi(pi_tags[7][0], '192.168.1.27')
     pi_tags[8] = lan.update_hmi(pi_tags[8][0], '192.168.1.28')
     pi_tags[9] = lan.update_hmi(pi_tags[9][0], '192.168.1.29')
-    
+
     for tag_set in pi_tags:
         tags = tag_set[0]
         status = tag_set[1]
@@ -84,10 +84,8 @@ while True:
             hmi_registers[r+5] = write_bit(hmi_registers[r+5], 0, status)
             hmi_registers[r+5] = write_bit(hmi_registers[r+5], 1, tags.servo_ready)
             hmi_registers[r+5] = write_bit(hmi_registers[r+5], 2, tags.underspeed)
-            
     
-    #pw((hmi_registers[37], hmi_registers[38]))
-    hmi.write_registers(0, hmi_registers[0:53])
+    hmi.write_registers(0, hmi_registers[0:54])
     sleep(0.2)    
 
 hmi.close()
