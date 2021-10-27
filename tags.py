@@ -108,6 +108,12 @@ class Tags:
         self.camera_serial = tags.camera_serial
         self.switch_enabled = tags.switch_enabled
 
+    def hmi_client(self, tags):
+        self.servo_offsets = tags.servo_offsets
+
+    def hmi_server(self, tags):
+        pass
+
 class Images:
     width = 320
     height = 256

@@ -36,6 +36,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
             elif message[0] == 'monitor':
                 lan.send_message((tags,images), connection)
                 continue
+            elif message[0] == 'hmi':
+                tags.hmi_client(message[1])
             elif message[0] == 'restart':
                 command_line('sudo reboot now')
             
