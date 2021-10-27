@@ -24,10 +24,35 @@ pi_tags = [ [Tags(),False],
             [Tags(),False],
             [Tags(),False] ]
 
+io_db = 0
+do_db = 0
+all_db = False
+
 while True:
     hmi_registers = hmi.read_registers(0,56)
 
-    print(hmi_registers[54], hmi_registers[55])
+    increase_ofset = hmi_registers[54]
+    decrease_ofset = hmi_registers[55]
+
+    for tag_set in pi_tags:
+        if tag_set[0].id != 0:
+            if (increase_ofset == tag_set[0].id or increase_ofset == 10) and (io_db != increase_ofset or not all_db):
+                tag_set[0].servo_offsets[tag_set[0].id] += 0.03
+                io_db = increase_ofset
+            elif (decrease_ofset == tag_set[0].id or decrease_ofset == 10) and (do_db != decrease_ofset or not all_db):
+                tag_set[0].servo_offsets[tag_set[0].id] -= 0.03
+                do_db = decrease_ofset
+
+    if increase_ofset == 10 or decrease_ofset == 10:
+        all_db = True
+    else:
+        all_db = False
+
+    if increase_ofset == 0:
+        io_db = 0
+    
+    if decrease_ofset == 0:
+        do_db = 0
 
     pi_tags[2] = lan.update_hmi(pi_tags[2][0], '192.168.1.22')
     pi_tags[3] = lan.update_hmi(pi_tags[3][0], '192.168.1.23')
