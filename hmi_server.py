@@ -44,7 +44,7 @@ while True:
             r = (tags.id-1)*4
             hmi_registers[r] = int(abs((tags.deviation+10)*100))
             hmi_registers[r+1] = int(abs(tags.speed*100))
-            hmi_registers[r+2] = int(abs(tags.offset+256))
+            hmi_registers[r+2] = int(abs(tags.servo_offsets[tags.id]+256))
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 0, status)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 1, tags.servo_ready)
             hmi_registers[r+3] = write_bit(hmi_registers[r+3], 2, tags.underspeed)
