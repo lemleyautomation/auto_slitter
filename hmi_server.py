@@ -31,8 +31,8 @@ all_db = False
 while True:
     hmi_registers = hmi.read_registers(0,56)
 
-    increase_ofset = hmi_registers[54]
-    decrease_ofset = hmi_registers[55]
+    increase_ofset = hmi_registers[55]
+    decrease_ofset = hmi_registers[54]
 
     for tag_set in pi_tags:
         if tag_set[0].id != 0:
