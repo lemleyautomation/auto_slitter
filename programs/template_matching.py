@@ -18,7 +18,7 @@ def getSpeed(images, tags):
         inches_travelled = spd/tags.pixels_per_inch
         inches_per_second = inches_travelled / seconds_per_frame
         feet_per_minute = inches_per_second * 5
-        tags.speed = feet_per_minute / 40
+        tags.speed = feet_per_minute / 50
 
 def getDeviation(images, tags):
     pos = (tags.deviation*tags.pixels_per_inch)
