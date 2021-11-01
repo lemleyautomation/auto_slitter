@@ -23,16 +23,16 @@ class Tags:
                       0,
                       -0.12 ]
 
-    servo_gains = [ 0.4,
-                    0.4,
-                    0.4,
-                    0.4,
-                    0.4,
-                    0.4,
-                    0.4,
-                    0.4,
-                    0.4,
-                    0.4 ]
+    servo_gains = [ 1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1 ]
 
     speed = 0.0
     speed_samples = numpy.zeros(5)
@@ -42,7 +42,7 @@ class Tags:
 
     offset = 0
     camera_serial = '20439780'
-    pixels_per_inch = 73
+    pixels_per_inch = 185
 
     cam_serials = [ '00000000', #0
                     '00000000', #1

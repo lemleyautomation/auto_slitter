@@ -11,7 +11,7 @@ from template_matching      import getSpeed
 from template_matching      import getDeviation as d0
 from sobel_lut              import getDeviation as d1
 from sobel_lut_inverted     import getDeviation as d2
-programs = [d0, d1, d2]
+programs = [d1, d2]
 
 import network_functions as lan
 from tags import Images, Tags
@@ -63,8 +63,9 @@ with Camera(tags.camera_serial) as camera:
         tags.underspeed = (tags.speed < 0.10) # units: % of maximum rollup speed
         if tags.speed < 0.2:
             indicators = [ program(images, tags) for program in programs]
-            tags.elect_program(indicators)
-            tags.program = 2
+            #tags.elect_program(indicators)
+            #print(tags.program, tags.votes)
+            tags.program = 1
         else:
             programs[tags.program](images, tags)
         
