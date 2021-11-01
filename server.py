@@ -23,7 +23,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
     while True:
         connection, address = tag_server.accept()
         with connection:
-            message = lan.recv_msg(connection)
+            try:
+                message = lan.recv_msg(connection)
+            except:
+                continue
             
             #print(message[0], address)
 
@@ -41,4 +44,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
             elif message[0] == 'restart':
                 command_line('sudo reboot now')
             
-            lan.send_message(tags, connection)
+            try:
+                lan.send_message(tags, connection)
+            except:
+                pass
