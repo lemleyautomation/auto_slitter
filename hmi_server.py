@@ -9,6 +9,8 @@ from time import sleep
 from tags import Tags
 import network_functions as lan
 
+sleep(120)
+
 hmi = mod.ModbusTcp(ip="192.168.1.45", port=502)
 hmi.connect()
 hmi_registers = hmi.read_registers(0,56)
