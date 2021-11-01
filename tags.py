@@ -38,6 +38,7 @@ class Tags:
     speed_samples = numpy.zeros(5)
     ss_index = 0
     deviation = 0.0
+    pos = 0.0
     underspeed = True
 
     offset = 0

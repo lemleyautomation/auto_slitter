@@ -92,9 +92,17 @@ def getDeviation(images, tags):
         pos += 1
     elif y < pos-1:
         pos -= 1
-    
-    tags.deviation = pos/tags.pixels_per_inch
 
-    #print(round(y,3), round(pos, 3), round(tags.deviation,3))
+    if abs(y-tags.pos) < 12:
+        tags.pos = y
+    else:
+        if y > tags.pos+1:
+            tags.pos += 1
+        elif y < tags.pos -1:
+            tags.pos -= 1
+    
+    tags.deviation = tags.pos/tags.pixels_per_inch
+
+    #print(round(y,3), round(tags.pos, 3), round(pos, 3))
     #print('\t\t', tags.deviation, indicator)
     return indicator
