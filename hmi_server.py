@@ -9,7 +9,7 @@ from time import sleep
 from tags import Tags
 import network_functions as lan
 
-sleep(120)
+#sleep(120)
 
 hmi = mod.ModbusTcp(ip="192.168.1.45", port=502)
 hmi.connect()
@@ -68,6 +68,8 @@ while True:
     for tag_set in pi_tags:
         tags = tag_set[0]
         status = tag_set[1]
+
+        #print (tags.id, status)
         
         if tags.id != 0:
             r = (tags.id-1)*6
@@ -78,8 +80,13 @@ while True:
 
             position_command = relative_position - tags.deviation
 
-            hmi_registers[r]   = int( abs( (relative_position*100)+1000 ) )
-            hmi_registers[r+1] = int( abs( (position_command*100)+1000 ) )
+            try:
+                hmi_registers[r]   = int( abs( (relative_position*100)+1000 ) )
+                hmi_registers[r+1] = int( abs( (position_command*100)+1000 ) )
+            except OverflowError:
+                #print (int( abs( (relative_position*100)+1000 ) ),int( abs( (position_command*100)+1000 ) ) )
+                hmi_registers[r]   = 0
+                hmi_registers[r+1] = 0
             hmi_registers[r+2] = int( abs( (tags.deviation*100)+1000 ) )
             hmi_registers[r+3] = int( abs( (tags.speed*100)+1000 ) )
             hmi_registers[r+4] = int( abs( (tags.servo_offsets[tags.id]*100)+1000 ) )
