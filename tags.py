@@ -83,6 +83,7 @@ class Tags:
         self.program = winner
 
     def servo_client(self, tags):
+        self.id = tags.id
         self.switch_enabled = tags.switch_enabled
         self.servo_enabled = tags.servo_enabled
         self.servo_ready = tags.servo_ready

@@ -14,7 +14,6 @@ import network_functions as lan
 
 images = Images()
 tags = Tags()
-tags.id = lan.get_ID()
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tag_server:
     tag_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

@@ -1,9 +1,17 @@
 import pylibmodbus as mod
 import bitFunctions as bit
+from time import sleep
 
 def connect():
-    limit_switch = mod.ModbusTcp(ip="192.168.1.100", port=502)
-    limit_switch.connect()
+    limit_switch = None
+    while not limit_switch:
+        try:
+            limit_switch = mod.ModbusTcp(ip="192.168.1.100", port=502)
+            limit_switch.connect()
+        except:
+            limit_switch = None
+            #print('connection failed')
+            sleep(1)
     return limit_switch
 
 def get_status(limit_switch, index):

@@ -8,12 +8,13 @@ import Servo
 from tags import Tags
 
 tags = Tags()
-tags.id = lan.get_ID()
 
 limit_switch = switch.connect()
 tags.switch_enabled, limit_switch = switch.get_status(limit_switch, tags.id)
 limit_switch_db = False
 limit_switch_transition_time = now()
+
+tags.id = lan.get_ID()
 
 servo_input_registers, servo_output_registers, servo = Servo.connect(tags.id)
 tags.servo_enabled = False
