@@ -1,0 +1,9 @@
+[Unit]
+Description=auto slitter servo restart timer
+
+[Timer]
+OnActiveSec=1h
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=timers.target
