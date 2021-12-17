@@ -88,12 +88,12 @@ def getDeviation(images, tags):
     bins = opencv.GaussianBlur(bins, (0,0), 10)
     
     y = numpy.argmax(bins) - (images.current.shape[0]/2) + (((tags.offset/32)*tags.pixels_per_inch))
-    if y > pos+1:
-        pos += 1
-    elif y < pos-1:
-        pos -= 1
+    #if y > pos+1:
+    #    pos += 1
+    #elif y < pos-1:
+    #    pos -= 1
 
-    if abs(y-tags.pos) < 12:
+    if abs(y-tags.pos) < 20:
         tags.pos = y
     else:
         if y > tags.pos+1:
@@ -101,7 +101,7 @@ def getDeviation(images, tags):
         elif y < tags.pos -1:
             tags.pos -= 1
     
-    tags.deviation = tags.pos/tags.pixels_per_inch
+    tags.deviation = y/tags.pixels_per_inch # tags.pos/tags.pixels_per_inch
 
     #print(round(y,3), round(tags.pos, 3), round(pos, 3))
     #print('\t\t', tags.deviation, indicator)
