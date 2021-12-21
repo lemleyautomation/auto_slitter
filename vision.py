@@ -63,7 +63,7 @@ with Camera(tags.camera_serial) as camera:
         tags.underspeed = (tags.speed < 0.10) # units: % of maximum rollup speed
         tags.program = 1
         programs[tags.program](images, tags)
-        tags.deviation = tags.deviation * 2
+        tags.deviation = tags.deviation * 4
         
         #print(round(tags.speed,2), '\t', tags.deviation)
         #print(tags.votes, tags.program, round(now() - start,3))
