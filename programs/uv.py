@@ -33,7 +33,7 @@ def getDeviation(images, tags):
 
     deviation = (numpy.argmax(graph) - (images.current.shape[0]/2)) / tags.pixels_per_inch
 
-    if abs(deviation - tags.deviation) < 0.05:
+    if abs(deviation - tags.deviation) < 0.2:
         tags.deviation_samples[tags.deviation_index] = deviation
     else:
         tags.deviation_samples[tags.deviation_index] = 0
