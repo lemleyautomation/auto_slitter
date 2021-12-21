@@ -31,6 +31,12 @@ def getDeviation(images, tags):
     #images.heat_map = clone(derivative)
     graph = opencv.reduce(derivative, 1, opencv.REDUCE_SUM)
 
-    tags.deviation_samples[tags.deviation_index] = (numpy.argmax(graph) - (images.current.shape[0]/2)) / tags.pixels_per_inch
+    deviation = (numpy.argmax(graph) - (images.current.shape[0]/2)) / tags.pixels_per_inch
+
+    if abs(deviation - tags.deviation) < 0.05:
+        tags.deviation_samples[tags.deviation_index] = deviation
+    else:
+        tags.deviation_samples[tags.deviation_index] = 0
+    
     tags.deviation_index = (tags.deviation_index+1)%len(tags.deviation_samples)
     tags.deviation = numpy.average(tags.deviation_samples)
