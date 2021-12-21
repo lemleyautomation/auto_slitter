@@ -57,14 +57,24 @@ def set_position(servo_output_registers, desired_position):
 def get_position_command(servo_output_registers):
     return bit.get_float(servo_output_registers[37], servo_output_registers[36])
 
-def set_speed(servo_output_registers, speed_command, acceleration_command, deceleration_command):
-    servo_output_registers[20] = int(acceleration_command*100)
-    servo_output_registers[21] = 0
-    servo_output_registers[24] = int(deceleration_command*100)
-    servo_output_registers[25] = 0
-    servo_output_registers[28] = int(speed_command*100)
-    servo_output_registers[29] = 0
+def calc_speed(deviation, frame_rate):
+    deviation = abs(deviation)
+    acceleration = (2*deviation)/((0.5*frame_rate)**2)
+    speed = acceleration * (0.5*frame_rate)
+    return speed, acceleration
+
+def set_speed(servo_output_registers, deviation, frame_rate):
+    speed, acceleration = calc_speed(deviation, frame_rate)
+    servo_output_registers[21], servo_output_registers[20] = bit.get_words(acceleration)
+    servo_output_registers[25], servo_output_registers[24] = bit.get_words(acceleration)
+    servo_output_registers[29], servo_output_registers[28] = bit.get_words(speed)
     return servo_output_registers
+
+def get_speed_command(servo_output_registers):
+    return bit.get_float(servo_output_registers[21], servo_output_registers[20])
+
+def get_accel_command(servo_output_registers):
+    return bit.get_float(servo_output_registers[29], servo_output_registers[28])
 
 def start_move(servo_output_registers, status):
     if status:

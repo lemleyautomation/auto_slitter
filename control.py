@@ -9,6 +9,8 @@ from tags import Tags
 
 tags = Tags()
 
+frame_rate = 1/50
+
 limit_switch = switch.connect()
 tags.switch_enabled, limit_switch = switch.get_status(limit_switch, tags.id)
 limit_switch_db = False
@@ -43,10 +45,9 @@ while True:
 
         if not Servo.busy(servo_input_registers):
             servo_output_registers = Servo.set_position(servo_output_registers, tags.position - dev)
-
-        #output_file.write( str(Servo.get_position(servo_input_registers))+','+str(Servo.get_position_command(servo_output_registers))+','+str(dev)+'\n')
-        #print(Servo.get_position(servo_input_registers), Servo.get_position_command(servo_output_registers), tags.deviation)
-        #print( bit.bp(servo_input_registers[44]), bit.bp(servo_input_registers[47]), bit.bp(servo_output_registers[0]), bit.bp(servo_output_registers[2]), round(tags.deviation,2))
+            servo_output_registers = Servo.set_speed(servo_output_registers, tags.deviation, frame_rate)
+            tags.servo_speed = Servo.get_speed_command(servo_output_registers)
+            tags.servo_accel = Servo.get_accel_command(servo_output_registers)
 
         if now()-limit_switch_transition_time > 0.06:
             servo_output_registers = Servo.enable(servo_output_registers)
@@ -70,11 +71,10 @@ while True:
         servo.close()
 
     tags.servo_server(lan.servo_upate(tags))
-    #print(round(tags.speed,2), '\t', tags.deviation)
     
     cycle = now()-loop_time
-    if cycle < 0.03125:
-        sleep( 0.03125 - cycle )
+    if cycle < frame_rate:
+        sleep( frame_rate - cycle )
 
 limit_switch.close()   
 

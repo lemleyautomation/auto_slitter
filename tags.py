@@ -10,6 +10,8 @@ class Tags:
     servo_enabled = False
     servo_ready = False
     position = 0.0
+    servo_speed = 0.0
+    servo_accel = 0.0
     start_position = 0.0
 
     servo_offsets = [ 0,
@@ -37,7 +39,10 @@ class Tags:
     speed = 0.0
     speed_samples = numpy.zeros(5)
     ss_index = 0
+    
     deviation = 0.0
+    deviation_samples = numpy.zeros(3)
+    deviation_index = 0
     pos = 0.0
     underspeed = True
 
