@@ -42,6 +42,8 @@ while True:
 
         tags.position = Servo.get_position(servo_input_registers)
 
+        #print(bit.bp(servo_input_registers[44]), bit.bp(servo_input_registers[45]), bit.bp(servo_input_registers[46]), bit.bp(servo_input_registers[47]))
+
         if not Servo.busy(servo_input_registers):
             servo_output_registers = Servo.set_position(servo_output_registers, tags.position - dev)
             servo_output_registers = Servo.set_speed(servo_output_registers, tags.deviation, frame_rate)
@@ -57,7 +59,7 @@ while True:
 
         too_far = ( abs(relative_position) > 3 and ((relative_position>0) == (tags.deviation>0)) ) # 3 inches awawy from where we started
 
-        if  Servo.enabled(servo_input_registers) and not too_far and not Servo.start_move_active(servo_output_registers):
+        if  Servo.enabled(servo_input_registers) and not too_far and not tags.underspeed and not Servo.start_move_active(servo_output_registers):
             servo_output_registers = Servo.start_move(servo_output_registers, True)
         else:
             servo_output_registers = Servo.start_move(servo_output_registers, False)
