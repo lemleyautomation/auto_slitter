@@ -20,7 +20,7 @@ def get_status(limit_switch, index):
     try:
         limit_switch_response = limit_switch.read_registers(31,1)[0] #register 31, single word
         limit_switch_status = bit.get_bit(limit_switch_response, index-1)
-        run_command = bit.get_bit(limit_switch_response, 10)
+        run_command = not bit.get_bit(limit_switch_response, 10)
     except:
         limit_switch.close()
         limit_switch = connect()
