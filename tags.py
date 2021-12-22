@@ -90,6 +90,7 @@ class Tags:
     def servo_client(self, tags):
         self.id = tags.id
         self.switch_enabled = tags.switch_enabled
+        self.underspeed = tags.underspeed
         self.servo_enabled = tags.servo_enabled
         self.servo_ready = tags.servo_ready
         self.position = tags.position
@@ -99,14 +100,12 @@ class Tags:
     def servo_server(self, tags):
         self.speed = tags.speed
         self.deviation = tags.deviation
-        self.underspeed = tags.underspeed
         self.servo_offsets = tags.servo_offsets
 
     def vision_client(self, tags):
         self.speed = tags.speed
         self.deviation = tags.deviation
         self.program = tags.program
-        self.underspeed = tags.underspeed
         self.votes = tags.votes
         return self
 

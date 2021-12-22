@@ -12,7 +12,7 @@ tags = Tags()
 frame_rate = 1/50
 
 limit_switch = switch.connect()
-tags.switch_enabled, limit_switch = switch.get_status(limit_switch, tags.id)
+tags.switch_enabled, limit_switch, run_enable = switch.get_status(limit_switch, tags.id)
 limit_switch_db = False
 limit_switch_transition_time = now()
 
@@ -27,7 +27,7 @@ tags.start_position = Servo.get_position(servo_input_registers)
 while True:
     loop_time = now()
 
-    tags.switch_enabled, limit_switch = switch.get_status(limit_switch, tags.id)
+    tags.switch_enabled, limit_switch, tags.underspeed = switch.get_status(limit_switch, tags.id)
 
     dev = (tags.deviation*tags.servo_gains[tags.id]) + tags.servo_offsets[tags.id]
     #print(dev)
