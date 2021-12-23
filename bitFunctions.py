@@ -19,13 +19,13 @@ def write_bit(variable, index, status):
     else:
         return clear_bit(variable,index)
 
-def get_words(value, resolution=2):
+def get_words(value, resolution=5):
     int_value = int(value*(10**resolution))
     upper = numpy.array([int_value>>16], dtype="uint16")[0]
     lower = numpy.array([int_value], dtype="uint16")[0]
     return upper, lower
 
-def get_float(upper, lower, resolution=2):
+def get_float(upper, lower, resolution=5):
     value = (upper<<16)+lower
     return float(value/(10**resolution))
 

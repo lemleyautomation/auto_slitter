@@ -27,7 +27,7 @@ def read(servo, both=False):
 
 def configure(servo, servo_input_registers, servo_output_registers):
     servo_output_registers[0] = bit.clear_bit(servo_output_registers[0], 0)     # make sure servo is off
-    servo_output_registers[48] = 2                                  # servo decimal places
+    servo_output_registers[48] = 5                                  # servo decimal places
     servo_output_registers[49] = 1                                  # servo homing type
     servo_output_registers[51] = 1                                  # servo move type
     servo_output_registers[0] = bit.set_bit(servo_output_registers[0], 2)       # start homing
@@ -36,12 +36,9 @@ def configure(servo, servo_input_registers, servo_output_registers):
     servo.write_registers(0,servo_output_registers)
     sleep(0.05)
     servo_output_registers[0] = bit.clear_bit(servo_output_registers[0], 2)     # stop homing
-    servo_output_registers[20] = 1100                                # set acceleration to 4 in/s^2
-    servo_output_registers[21] = 0
-    servo_output_registers[24] = 1100                                # set deceleration to 4 in/s^2
-    servo_output_registers[25] = 0
-    servo_output_registers[28] = 400                                # set servo speed to 2 in/s
-    servo_output_registers[29] = 0
+    servo_output_registers[21], servo_output_registers[20] = bit.get_words(11)  # set acceleration to 11 in/s^2
+    servo_output_registers[25], servo_output_registers[24] = bit.get_words(11)  # set deceleration to 11 in/s^2
+    servo_output_registers[29], servo_output_registers[28] = bit.get_words(4)   # set servo speed to 4 in/s
     servo.write_registers(0,servo_output_registers)
     
     return servo_input_registers, servo_output_registers

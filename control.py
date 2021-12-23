@@ -57,7 +57,10 @@ while True:
 
         relative_position = tags.position - tags.start_position
 
-        too_far = ( abs(relative_position) > 3 and ((relative_position>0) == (tags.deviation>0)) ) # 3 inches awawy from where we started
+        if relative_position < -42000:
+            relative_position += 42949.67296
+
+        too_far = ( abs(relative_position) > 3 and ((relative_position>0) != (tags.deviation>0)) ) # 3 inches awawy from where we started
 
         if  Servo.enabled(servo_input_registers) and not too_far and not Servo.start_move_active(servo_output_registers):
             servo_output_registers = Servo.start_move(servo_output_registers, True)
