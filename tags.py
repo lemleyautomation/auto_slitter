@@ -9,6 +9,7 @@ class Tags:
     switch_enabled = False
     servo_enabled = False
     servo_ready = False
+    overtravel = False
     position = 0.0
     servo_speed = 0.0
     servo_accel = 0.0
@@ -92,6 +93,7 @@ class Tags:
         self.switch_enabled = tags.switch_enabled
         self.underspeed = tags.underspeed
         self.servo_enabled = tags.servo_enabled
+        self.overtravel = tags.overtravel
         self.servo_ready = tags.servo_ready
         self.position = tags.position
         self.start_position = tags.start_position

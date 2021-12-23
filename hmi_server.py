@@ -93,6 +93,7 @@ while True:
             hmi_registers[r+5] = write_bit(hmi_registers[r+5], 0, status)
             hmi_registers[r+5] = write_bit(hmi_registers[r+5], 1, tags.servo_ready)
             hmi_registers[r+5] = write_bit(hmi_registers[r+5], 2, tags.underspeed)
+            hmi_registers[r+5] = write_bit(hmi_registers[r+5], 3, tags.overtravel)
     
     hmi.write_registers(0, hmi_registers[0:54])
     sleep(0.2)    
